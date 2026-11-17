@@ -8,7 +8,7 @@ const Login = () => {
           Inicia Sesión y Administra tus <span className="text-black">Pacientes</span>
         </h1>
       </div>
-      <div>
+      <div className="mt-20 md:mt-5 shadow-lg px-5 py-10 rounded-xl bg-white">
         <form>
           <div className="my-5">
             <label className="uppercase text-gray-600 block text-xl font-bold">Email</label>
@@ -26,7 +26,7 @@ const Login = () => {
         </form>
         <nav className="mt-10 lg:flex lg:justify-between">
           <Link to="/new_account" className="block text-cener my-5 text-gray-500">
-            No tiene una cuenta? Registrate!
+            No tienes una cuenta? Registrate!
           </Link>
           <Link to="/forget_password" className="block text-cener my-5 text-gray-500">
             Olvide mi contraseña!
