@@ -3,10 +3,14 @@ import { Link } from "react-router";
 import { FadeLoader } from "react-spinners";
 import notify from "./../utils/notify";
 import forgetPassword from "../../services/authServices/forgetPassword";
+import useAuth from "../../hooks/useAuth";
 
 const ForgetPassword = () => {
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
+
+  const { auth, setAuth } = useAuth();
+  console.log(auth);
 
   const handleSubmit = e => {
     e.preventDefault();
