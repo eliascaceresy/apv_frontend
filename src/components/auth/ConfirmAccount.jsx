@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import { FadeLoader } from "react-spinners";
-import { confirmAccount } from "./axios";
 import notify from "../utils/notify";
+import confirmAccount from "../../services/authServices/confirmAccount";
 
 const ConfirmAccount = () => {
   const params = useParams();
@@ -16,7 +16,7 @@ const ConfirmAccount = () => {
       confirmAccount(token, response => {
         console.log(response);
         if (response.status === 200) {
-          notify("La cuenta se ha confirmado exitosamente! ya puede iniciar sesión.", "success");
+          notify("La cuenta se ha confirmado exitosamente! ya puedes iniciar sesión.", "success");
           navigate("/");
         } else {
           notify(response?.data?.msg, "error");
@@ -36,6 +36,18 @@ const ConfirmAccount = () => {
         </h1>
       </div>
       <div className="mt-20 md:mt-5 shadow-lg px-5 py-10 rounded-xl bg-white">
+        <FadeLoader
+          color={"#4f39f6"}
+          loading={loading}
+          cssOverride={{
+            display: "block",
+            margin: "0 auto",
+            borderColor: "red",
+          }}
+          size={150}
+          aria-label="Loading Spinner"
+          data-testid="loader"
+        />
         <button
           type="button"
           className="bg-indigo-700 w-full py-3 rounded-xl text-white uppercase font-bold mt-5 hover:cursor-pointer hover:bg-indigo-800"

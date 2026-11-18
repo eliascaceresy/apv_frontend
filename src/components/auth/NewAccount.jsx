@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { Link } from "react-router";
 import { FadeLoader } from "react-spinners";
-import { createAccount } from "./axios";
 import notify from "../utils/notify";
+import createAccount from "../../services/authServices/createAccount";
 
 const NewAccount = () => {
   const [name, setName] = useState("");
