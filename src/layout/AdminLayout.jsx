@@ -1,26 +1,37 @@
-import { useEffect } from "react";
-import { Navigate, Outlet, useNavigate } from "react-router";
+import { Navigate, Outlet } from "react-router";
 import useAuth from "../hooks/useAuth";
 import Header from "../components/common/Header";
 import Footer from "../components/common/Footer";
 
 const AdminLayout = () => {
-  const { auth, loadingAuth } = useAuth();
-  console.log(auth);
+  const { status, retrySession } = useAuth();
 
-  if (loadingAuth) return "cargando...";
+  if (status === "checking") {
+    return <p role="status" className="p-5 text-center">Verificando sesión...</p>;
+  }
+
+  if (status === "error") {
+    return (
+      <main className="p-5 text-center">
+        <p>No se pudo verificar la sesión. Comprueba tu conexión e inténtalo de nuevo.</p>
+        <button type="button" onClick={retrySession} className="mt-4 text-indigo-600 underline">
+          Reintentar
+        </button>
+      </main>
+    );
+  }
+
+  if (status !== "authenticated") {
+    return <Navigate to="/" replace />;
+  }
 
   return (
     <>
       <main className="">
         <Header />
-        {auth?.profile?._id ? (
-          <main className="container mx-auto mt-10">
-            <Outlet />
-          </main>
-        ) : (
-          <Navigate to="/" />
-        )}
+        <main className="container mx-auto mt-10">
+          <Outlet />
+        </main>
         <Footer />
       </main>
     </>

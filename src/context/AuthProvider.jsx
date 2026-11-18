@@ -1,4 +1,4 @@
-import { useState, useEffect, createContext } from "react";
+import { createContext, useCallback, useEffect, useRef, useState } from "react";
 import checkSession from "../services/authServices/checkSession";
 
 const AuthContext = createContext();
@@ -6,33 +6,79 @@ const AuthContext = createContext();
 const AuthProvider = props => {
   const { children } = props;
 
-  const [auth, setAuth] = useState({});
-  const [loadingAuth, setLoadingAuth] = useState(true);
+  const [auth, setAuth] = useState(null);
+  const [status, setStatus] = useState("checking");
+  const sessionRequestId = useRef(0);
 
-  useEffect(() => {
-    const authenticateUser = () => {
-      const token = localStorage.getItem("session");
-
-      if (!token) {
-        setLoadingAuth(false);
-        return;
-      }
-
-      checkSession(token, response => {
-        if (response.status === 200) {
-          setAuth(response.data);
-          setLoadingAuth(false);
-        } else {
-          setAuth({});
-          setLoadingAuth(false);
-        }
-      });
-    };
-
-    authenticateUser();
+  const logout = useCallback(() => {
+    sessionRequestId.current += 1;
+    localStorage.removeItem("session");
+    setAuth(null);
+    setStatus("unauthenticated");
   }, []);
 
-  return <AuthContext.Provider value={{ auth, setAuth, loadingAuth }}>{children}</AuthContext.Provider>;
+  const loadSession = useCallback(async () => {
+    const requestId = ++sessionRequestId.current;
+
+    if (!localStorage.getItem("session")) {
+      setAuth(null);
+      setStatus("unauthenticated");
+      return false;
+    }
+
+    setStatus("checking");
+
+    try {
+      const response = await checkSession();
+
+      if (requestId !== sessionRequestId.current) {
+        return false;
+      }
+
+      setAuth(response.data);
+      setStatus("authenticated");
+      return true;
+    } catch (error) {
+      if (requestId !== sessionRequestId.current) {
+        return false;
+      }
+
+      if (error.response?.status === 401 || error.response?.status === 403) {
+        logout();
+      } else {
+        setStatus("error");
+      }
+
+      return false;
+    }
+  }, [logout]);
+
+  const login = useCallback(async token => {
+    localStorage.setItem("session", token);
+
+    const authenticated = await loadSession();
+    if (!authenticated) {
+      throw new Error("No se pudo verificar la sesión.");
+    }
+  }, [loadSession]);
+
+  useEffect(() => {
+    loadSession();
+    return () => {
+      sessionRequestId.current += 1;
+    };
+  }, [loadSession]);
+
+  useEffect(() => {
+    window.addEventListener("auth:session-expired", logout);
+    return () => window.removeEventListener("auth:session-expired", logout);
+  }, [logout]);
+
+  return (
+    <AuthContext.Provider value={{ auth, status, login, logout, retrySession: loadSession }}>
+      {children}
+    </AuthContext.Provider>
+  );
 };
 
 export { AuthProvider };

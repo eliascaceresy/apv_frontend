@@ -1,6 +1,9 @@
 import { Link } from "react-router";
+import useAuth from "../../hooks/useAuth";
 
 const Header = () => {
+  const { logout } = useAuth();
+
   return (
     <header className="py-10 bg-indigo-600">
       <div className="container mx-auto flex flex-col md:flex-row justify-between items-center">
@@ -15,7 +18,7 @@ const Header = () => {
             Perfil
           </Link>
 
-          <button type="button" className="text-white uppercase font-bold text-sm">
+          <button type="button" onClick={logout} className="text-white uppercase font-bold text-sm">
             Cerrar Sesión
           </button>
         </nav>

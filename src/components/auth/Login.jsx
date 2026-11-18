@@ -3,7 +3,7 @@ import useAuth from "../../hooks/useAuth";
 import { useState } from "react";
 import notify from "./../utils/notify";
 import { FadeLoader } from "react-spinners";
-import login from "../../services/authServices/login";
+import loginService from "../../services/authServices/login";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -11,8 +11,9 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
+  const { login: authenticate } = useAuth();
 
-  const handleSubmit = e => {
+  const handleSubmit = async e => {
     e.preventDefault();
 
     if ([email, password].includes("")) {
@@ -21,17 +22,18 @@ const Login = () => {
     }
 
     setLoading(true);
-    login({ email, password }, response => {
-      if (response.status === 200) {
-        localStorage.setItem("session", response.data.token);
-        setTimeout(() => {
-          setLoading(false);
-          navigate("/admin");
-        }, 2000);
-      } else {
-        notify(response.data.msg, "error");
-      }
-    });
+    try {
+      const response = await loginService({ email, password });
+      await authenticate(response.data.token);
+      navigate("/admin", { replace: true });
+    } catch (error) {
+      notify(
+        error.response?.data?.msg || error.message || "No se pudo iniciar sesión.",
+        "error",
+      );
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
