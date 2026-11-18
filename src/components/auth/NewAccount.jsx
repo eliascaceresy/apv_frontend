@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { Link } from "react-router";
-import { toast } from "react-toastify";
 import { FadeLoader } from "react-spinners";
 import { createAccount } from "./axios";
+import notify from "../utils/notify";
 
 const NewAccount = () => {
   const [name, setName] = useState("");
@@ -10,32 +10,6 @@ const NewAccount = () => {
   const [password, setPassword] = useState("");
   const [passwordConfirmation, setPasswordConfirmation] = useState("");
   const [loading, setLoading] = useState(false);
-
-  const notify = (message, type) => {
-    switch (type) {
-      case "error":
-        toast.error(message, {
-          position: "bottom-right",
-          autoClose: 4000,
-          theme: "colored",
-        });
-        break;
-      case "success":
-        toast.success(message, {
-          position: "bottom-right",
-          autoClose: 4000,
-          theme: "colored",
-        });
-        break;
-      default:
-        toast.info(message, {
-          position: "bottom-right",
-          autoClose: 4000,
-          theme: "colored",
-        });
-        break;
-    }
-  };
 
   const handleSubmit = async e => {
     e.preventDefault();

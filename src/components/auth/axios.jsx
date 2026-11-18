@@ -14,4 +14,16 @@ const createAccount = (data, callback) => {
     });
 };
 
-export { createAccount };
+const confirmAccount = (token, callback) => {
+  const url = `${urlBase}/confirm_account/${token}`;
+  const promise = axios.post(url);
+  promise
+    .then(response => {
+      callback(response);
+    })
+    .catch(error => {
+      callback(error.response);
+    });
+};
+
+export { createAccount, confirmAccount };
