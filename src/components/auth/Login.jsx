@@ -1,4 +1,4 @@
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import useAuth from "../../hooks/useAuth";
 import { useState } from "react";
 import notify from "./../utils/notify";
@@ -9,7 +9,8 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  const { setAuth } = useAuth();
+
+  const navigate = useNavigate();
 
   const handleSubmit = e => {
     e.preventDefault();
@@ -23,8 +24,10 @@ const Login = () => {
     login({ email, password }, response => {
       if (response.status === 200) {
         localStorage.setItem("session", response.data.token);
-        setAuth(response.data.token);
-        setLoading(false);
+        setTimeout(() => {
+          setLoading(false);
+          navigate("/admin");
+        }, 2000);
       } else {
         notify(response.data.msg, "error");
       }
