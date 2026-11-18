@@ -33,7 +33,6 @@ const NewAccount = () => {
 
     try {
       createAccount({ name, email, password }, response => {
-        console.log(response.status);
         if (response.status === 201) {
           notify("Cuenta creada exitosamente! Revisa tu email", "success");
         } else {
