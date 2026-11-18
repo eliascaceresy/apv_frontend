@@ -7,18 +7,24 @@ const AuthProvider = props => {
   const { children } = props;
 
   const [auth, setAuth] = useState({});
+  const [loadingAuth, setLoadingAuth] = useState(true);
 
   useEffect(() => {
     const authenticateUser = () => {
       const token = localStorage.getItem("session");
 
-      if (!token) return;
+      if (!token) {
+        setLoadingAuth(false);
+        return;
+      }
 
       checkSession(token, response => {
         if (response.status === 200) {
           setAuth(response.data);
+          setLoadingAuth(false);
         } else {
           setAuth({});
+          setLoadingAuth(false);
         }
       });
     };
@@ -26,7 +32,7 @@ const AuthProvider = props => {
     authenticateUser();
   }, []);
 
-  return <AuthContext.Provider value={{ auth, setAuth }}>{children}</AuthContext.Provider>;
+  return <AuthContext.Provider value={{ auth, setAuth, loadingAuth }}>{children}</AuthContext.Provider>;
 };
 
 export { AuthProvider };
