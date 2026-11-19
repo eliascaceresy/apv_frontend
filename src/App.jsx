@@ -8,6 +8,7 @@ import ForgetPassword from "./components/auth/ForgetPassword";
 import ChangePassword from "./components/auth/ChangePassword";
 import { AuthProvider } from "./context/AuthProvider";
 import AdminPatients from "./components/admin/AdminPatients";
+import { PatientsProvider } from "./context/PatientsProvider";
 
 function App() {
   return (

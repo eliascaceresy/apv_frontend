@@ -2,6 +2,7 @@ import { useState } from "react";
 import notify from "./../utils/notify";
 import Loader from "../common/Loader";
 import createPatient from "../../services/patientServices/createPatient";
+import usePatients from "../../hooks/usePatients";
 
 const PatientsForm = () => {
   const [petName, setPetName] = useState("");
@@ -12,6 +13,8 @@ const PatientsForm = () => {
   const [petSymptoms, setPetSymptoms] = useState("");
   const [petType, setPetType] = useState("");
   const [loading, setLoading] = useState(false);
+
+  const { savePatient } = usePatients();
 
   const clearForm = () => {
     setPetName("");
@@ -37,6 +40,7 @@ const PatientsForm = () => {
     try {
       createPatient(pet, response => {
         if (response.status === 201) {
+          savePatient(response.data.patient);
           notify("Paciente creado exitosamente!", "success");
         } else if (response.status === 422) {
           notify(response.statusText, "error");
@@ -52,8 +56,9 @@ const PatientsForm = () => {
 
   return (
     <>
-      <p className="text-lg text-center mb-10">
-        Añade tus pacientes y <span className="text-indigo-600 font-bold">Administralos</span>
+      <h2 className="font-black text-3xl text-center">Formulario de Pacientes</h2>
+      <p className="text-xl mt-5 mb-10 text-center">
+        Administra tus Pacientes y <span className="text-indigo-600 font-bold">Administralos</span>
       </p>
       <div className="shadow-lg px-10 py-10 rounded-xl bg-white mb-10 lg:mb-0">
         <form onSubmit={handleSubmit}>

@@ -1,12 +1,30 @@
 import React from "react";
+import usePatients from "../../hooks/usePatients";
+import Patient from "./Patient";
 
 const PatientsIndex = () => {
+  const { patients } = usePatients();
+
   return (
     <>
-      <p className="text-lg text-center mb-10">
-        Añade tus pacientes y <span className="text-indigo-600 font-bold">Administralos</span>
-      </p>
-      <div className="shadow-lg px-10 py-10 rounded-xl bg-white mb-10 lg:mb-0"></div>
+      {patients.length ? (
+        <>
+          <h2 className="font-black text-3xl text-center">Listado de Pacientes</h2>
+          <p className="text-xl mt-5 mb-10 text-center">
+            Administra tu <span className="text-indigo-600 font-bold">Pacientes y Citas</span>
+          </p>
+          {patients.map(patient => {
+            return <Patient patient={patient} />;
+          })}
+        </>
+      ) : (
+        <>
+          <h2 className="font-black text-3xl text-center">No hay Pacientes</h2>
+          <p className="text-xl mt-5 mb-10 text-center">
+            Comienza agregando pacientes <span className="text-indigo-600 font-bold">y aparecerán en este lugar</span>
+          </p>
+        </>
+      )}
     </>
   );
 };

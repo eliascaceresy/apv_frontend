@@ -2,12 +2,17 @@ import { Navigate, Outlet } from "react-router";
 import useAuth from "../hooks/useAuth";
 import Header from "../components/common/Header";
 import Footer from "../components/common/Footer";
+import { PatientsProvider } from "../context/PatientsProvider";
 
 const AdminLayout = () => {
   const { status, retrySession } = useAuth();
 
   if (status === "checking") {
-    return <p role="status" className="p-5 text-center">Verificando sesión...</p>;
+    return (
+      <p role="status" className="p-5 text-center">
+        Verificando sesión...
+      </p>
+    );
   }
 
   if (status === "error") {
@@ -26,7 +31,7 @@ const AdminLayout = () => {
   }
 
   return (
-    <>
+    <PatientsProvider>
       <main className="">
         <Header />
         <main className="container mx-auto mt-10">
@@ -34,7 +39,7 @@ const AdminLayout = () => {
         </main>
         <Footer />
       </main>
-    </>
+    </PatientsProvider>
   );
 };
 
