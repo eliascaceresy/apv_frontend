@@ -1,6 +1,6 @@
 import clientAxios from "../client";
 
-const getPatients = callback => {
+const getPatientsService = callback => {
   const promise = clientAxios.get("/patients");
   promise
     .then(response => {
@@ -11,4 +11,4 @@ const getPatients = callback => {
     });
 };
 
-export default getPatients;
+export default getPatientsService;

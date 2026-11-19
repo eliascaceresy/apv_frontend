@@ -1,6 +1,6 @@
 import clientAxios from "../client";
 
-const updatePatient = (id, data, callback) => {
+const updatePatientService = (id, data, callback) => {
   const promise = clientAxios.put(`/patients/${id}`, data);
   promise
     .then(response => {
@@ -11,4 +11,4 @@ const updatePatient = (id, data, callback) => {
     });
 };
 
-export default updatePatient;
+export default updatePatientService;

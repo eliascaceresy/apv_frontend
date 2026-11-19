@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import notify from "./../utils/notify";
 import Loader from "../common/Loader";
-import createPatient from "../../services/patientServices/createPatient";
+import createPatientService from "../../services/patientServices/createPatient";
 import usePatients from "../../hooks/usePatients";
-import updatePatient from "../../services/patientServices/updatePatient";
+import updatePatientService from "../../services/patientServices/updatePatient";
 
 const PatientsForm = () => {
   const [petName, setPetName] = useState("");
@@ -37,6 +37,11 @@ const PatientsForm = () => {
     setPetType("");
   };
 
+  const handleCancelEditing = () => {
+    clearForm();
+    setPatientEditing({});
+  };
+
   const handleSubmit = e => {
     e.preventDefault();
 
@@ -50,7 +55,7 @@ const PatientsForm = () => {
 
     try {
       if (patientEditing._id) {
-        updatePatient(patientEditing._id, patient, response => {
+        updatePatientService(patientEditing._id, patient, response => {
           if (response.status === 200) {
             notify("Paciente actualizado exitosamente!", "success");
             updatePatientsState(patientEditing._id, patient);
@@ -62,7 +67,7 @@ const PatientsForm = () => {
           setLoading(false);
         });
       } else {
-        createPatient(patient, response => {
+        createPatientService(patient, response => {
           if (response.status === 201) {
             savePatient(response.data.patient);
             notify("Paciente creado exitosamente!", "success");
@@ -197,6 +202,16 @@ const PatientsForm = () => {
             value={patientEditing._id ? "Editar Paciente" : "Agregar Paciente"}
             className="bg-indigo-700 w-full py-3 rounded-xl text-white uppercase font-bold mt-5 hover:cursor-pointer hover:bg-indigo-800"
           />
+          {patientEditing._id && (
+            <button
+              type="button"
+              className="bg-red-700 w-full py-3 rounded-xl text-white uppercase font-bold mt-5 hover:cursor-pointer hover:bg-red-800"
+              onClick={() => handleCancelEditing()}
+            >
+              {" "}
+              Cancelar{" "}
+            </button>
+          )}
         </form>
       </div>
     </>

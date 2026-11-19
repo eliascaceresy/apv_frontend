@@ -1,6 +1,7 @@
 import { createContext, useEffect, useState } from "react";
-import getPatients from "../services/patientServices/getPatients";
+import getPatientsService from "../services/patientServices/getPatients";
 import notify from "../components/utils/notify";
+import deletePatientService from "../services/patientServices/deletePatient";
 
 const PatientsContext = createContext();
 
@@ -11,7 +12,7 @@ const PatientsProvider = ({ children }) => {
   useEffect(() => {
     const getAllPatients = () => {
       try {
-        getPatients(response => {
+        getPatientsService(response => {
           if (response.status === 200) {
             setPatients([...response.data.patients]);
           } else {
@@ -35,8 +36,24 @@ const PatientsProvider = ({ children }) => {
     setPatients([...updatedPatients]);
   };
 
+  const deletePatient = id => {
+    const confirmed = confirm("Estás seguro que desea eliminar este paciente?");
+
+    if (confirmed) {
+      deletePatientService(id, response => {
+        if (response.status === 200) {
+          notify(response.data.msg, "success");
+          const updatedPatients = patients.filter(patient => patient._id !== id);
+          setPatients([...updatedPatients]);
+        }
+      });
+    }
+  };
+
   return (
-    <PatientsContext.Provider value={{ patients, savePatient, patientEditing, setPatientEditing, updatePatientsState }}>
+    <PatientsContext.Provider
+      value={{ patients, savePatient, patientEditing, setPatientEditing, updatePatientsState, deletePatient }}
+    >
       {children}
     </PatientsContext.Provider>
   );

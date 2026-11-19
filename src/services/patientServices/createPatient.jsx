@@ -1,6 +1,6 @@
 import clientAxios from "../client";
 
-const createPatient = (data, callback) => {
+const createPatientService = (data, callback) => {
   const promise = clientAxios.post("/patients", data);
   promise
     .then(response => {
@@ -11,4 +11,4 @@ const createPatient = (data, callback) => {
     });
 };
 
-export default createPatient;
+export default createPatientService;
