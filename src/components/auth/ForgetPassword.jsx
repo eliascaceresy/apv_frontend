@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { Link } from "react-router";
-import { FadeLoader } from "react-spinners";
 import notify from "./../utils/notify";
 import forgetPassword from "../../services/authServices/forgetPassword";
+import Loader from "../common/Loader";
 
 const ForgetPassword = () => {
   const [email, setEmail] = useState("");
@@ -48,18 +48,7 @@ const ForgetPassword = () => {
               onChange={e => setEmail(e.target.value)}
             />
           </div>
-          <FadeLoader
-            color={"#4f39f6"}
-            loading={loading}
-            cssOverride={{
-              display: "block",
-              margin: "0 auto",
-              borderColor: "red",
-            }}
-            size={150}
-            aria-label="Loading Spinner"
-            data-testid="loader"
-          />
+          <Loader loading={loading} />
           <input
             type="submit"
             value="Enviar Instrucciones"

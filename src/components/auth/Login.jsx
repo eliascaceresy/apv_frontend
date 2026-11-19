@@ -2,8 +2,8 @@ import { Link, useNavigate } from "react-router";
 import useAuth from "../../hooks/useAuth";
 import { useState } from "react";
 import notify from "./../utils/notify";
-import { FadeLoader } from "react-spinners";
 import loginService from "../../services/authServices/login";
+import Loader from "../common/Loader";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -27,10 +27,7 @@ const Login = () => {
       await authenticate(response.data.token);
       navigate("/admin", { replace: true });
     } catch (error) {
-      notify(
-        error.response?.data?.msg || error.message || "No se pudo iniciar sesión.",
-        "error",
-      );
+      notify(error.response?.data?.msg || error.message || "No se pudo iniciar sesión.", "error");
     } finally {
       setLoading(false);
     }
@@ -63,18 +60,7 @@ const Login = () => {
               onChange={e => setPassword(e.target.value)}
             />
           </div>
-          <FadeLoader
-            color={"#4f39f6"}
-            loading={loading}
-            cssOverride={{
-              display: "block",
-              margin: "0 auto",
-              borderColor: "red",
-            }}
-            size={150}
-            aria-label="Loading Spinner"
-            data-testid="loader"
-          />
+          <Loader loading={loading} />
           <input
             type="submit"
             value="Iniciar Sesión"

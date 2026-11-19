@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router";
-import { FadeLoader } from "react-spinners";
 import notify from "../utils/notify";
 import checkTokenChangePassword from "../../services/authServices/checkTokenChangePassword";
 import changePassword from "../../services/authServices/changePassword";
+import Loader from "../common/Loader";
 
 const ChangePassword = () => {
   const [loading, setLoading] = useState(false);
@@ -92,18 +92,7 @@ const ChangePassword = () => {
               onChange={e => setPasswordConfirmation(e.target.value)}
             />
           </div>
-          <FadeLoader
-            color={"#4f39f6"}
-            loading={loading}
-            cssOverride={{
-              display: "block",
-              margin: "0 auto",
-              borderColor: "red",
-            }}
-            size={150}
-            aria-label="Loading Spinner"
-            data-testid="loader"
-          />
+          <Loader loading={loading} />
           <input
             type="submit"
             value="Cambiar Contraseña"

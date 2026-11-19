@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router";
-import { FadeLoader } from "react-spinners";
 import notify from "../utils/notify";
 import confirmAccount from "../../services/authServices/confirmAccount";
+import Loader from "../common/Loader";
 
 const ConfirmAccount = () => {
   const params = useParams();
@@ -36,18 +36,7 @@ const ConfirmAccount = () => {
         </h1>
       </div>
       <div className="mt-20 md:mt-5 shadow-lg px-5 py-10 rounded-xl bg-white">
-        <FadeLoader
-          color={"#4f39f6"}
-          loading={loading}
-          cssOverride={{
-            display: "block",
-            margin: "0 auto",
-            borderColor: "red",
-          }}
-          size={150}
-          aria-label="Loading Spinner"
-          data-testid="loader"
-        />
+        <Loader loading={loading} />
         <button
           type="button"
           className="bg-indigo-700 w-full py-3 rounded-xl text-white uppercase font-bold mt-5 hover:cursor-pointer hover:bg-indigo-800"

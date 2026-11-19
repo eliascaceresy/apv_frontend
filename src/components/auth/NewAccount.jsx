@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { Link } from "react-router";
-import { FadeLoader } from "react-spinners";
 import notify from "../utils/notify";
 import createAccount from "../../services/authServices/createAccount";
+import Loader from "../common/Loader";
 
 const NewAccount = () => {
   const [name, setName] = useState("");
@@ -98,18 +98,7 @@ const NewAccount = () => {
               onChange={e => setPasswordConfirmation(e.target.value)}
             />
           </div>
-          <FadeLoader
-            color={"#4f39f6"}
-            loading={loading}
-            cssOverride={{
-              display: "block",
-              margin: "0 auto",
-              borderColor: "red",
-            }}
-            size={150}
-            aria-label="Loading Spinner"
-            data-testid="loader"
-          />
+          <Loader loading={loading} />
           <input
             type="submit"
             value="Registrarme"
