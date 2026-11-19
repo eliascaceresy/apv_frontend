@@ -1,8 +1,10 @@
 import { format } from "date-fns";
+import usePatients from "../../hooks/usePatients";
 
 const Patient = ({ patient }) => {
   const { petName, ownerName, ownerEmail, ownerPhone, petSymptoms, petType, registrationAt, _id } = patient;
-  console.log(patient);
+
+  const { setPatientEditing } = usePatients();
 
   return (
     <div className="mx-5 my-10 bg-white shadow-md px-5 py-10 rounded-xl">
@@ -32,6 +34,7 @@ const Patient = ({ patient }) => {
         <button
           type="button"
           className="py-2 px-5 bg-indigo-600 hover:bg-indigo-700 text-white uppercase font-bold rounded-lg hover:cursor-pointer"
+          onClick={() => setPatientEditing(patient)}
         >
           Editar
         </button>

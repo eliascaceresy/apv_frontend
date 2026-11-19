@@ -6,6 +6,7 @@ const PatientsContext = createContext();
 
 const PatientsProvider = ({ children }) => {
   const [patients, setPatients] = useState([]);
+  const [patientEditing, setPatientEditing] = useState({});
 
   useEffect(() => {
     const getAllPatients = () => {
@@ -29,7 +30,16 @@ const PatientsProvider = ({ children }) => {
     setPatients([...patients, patient]);
   };
 
-  return <PatientsContext.Provider value={{ patients, savePatient }}>{children}</PatientsContext.Provider>;
+  const updatePatientsState = (id, patient) => {
+    const updatedPatients = patients.map(patientMap => (patientMap._id === id ? patient : patientMap));
+    setPatients([...updatedPatients]);
+  };
+
+  return (
+    <PatientsContext.Provider value={{ patients, savePatient, patientEditing, setPatientEditing, updatePatientsState }}>
+      {children}
+    </PatientsContext.Provider>
+  );
 };
 
 export { PatientsProvider };

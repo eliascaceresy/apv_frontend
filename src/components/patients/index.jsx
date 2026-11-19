@@ -14,7 +14,7 @@ const PatientsIndex = () => {
             Administra tu <span className="text-indigo-600 font-bold">Pacientes y Citas</span>
           </p>
           {patients.map(patient => {
-            return <Patient patient={patient} />;
+            return <Patient patient={patient} key={patient._id} />;
           })}
         </>
       ) : (
