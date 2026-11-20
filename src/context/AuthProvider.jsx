@@ -2,6 +2,7 @@ import { createContext, useCallback, useEffect, useRef, useState } from "react";
 import checkSession from "../services/authServices/checkSession";
 import notify from "../components/utils/notify";
 import updateProfileService from "../services/profileServices/updateProfile";
+import changeProfilePasswordService from "../services/profileServices/changeProfilePassword";
 
 const AuthContext = createContext();
 
@@ -96,8 +97,25 @@ const AuthProvider = props => {
     return () => window.removeEventListener("auth:session-expired", logout);
   }, [logout]);
 
+  const changeProfilePassword = (data, callback) => {
+    try {
+      changeProfilePasswordService(data, response => {
+        if (response.status === 200) {
+          notify(response.data.msg, "success");
+          callback(response);
+        } else {
+          notify(response.data.msg, "error");
+        }
+      });
+    } catch (error) {
+      notify(error, "error");
+    }
+  };
+
   return (
-    <AuthContext.Provider value={{ auth, status, login, logout, retrySession: loadSession, updateProfile }}>
+    <AuthContext.Provider
+      value={{ auth, status, login, logout, retrySession: loadSession, updateProfile, changeProfilePassword }}
+    >
       {children}
     </AuthContext.Provider>
   );

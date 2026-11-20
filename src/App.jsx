@@ -9,7 +9,7 @@ import ChangePassword from "./components/auth/ChangePassword";
 import { AuthProvider } from "./context/AuthProvider";
 import AdminPatients from "./components/admin/AdminPatients";
 import EditProfile from "./components/admin/profile/EditProfile";
-import ProfileChangePassword from "./components/admin/profile/ProfileChangePassword";
+import ChangeProfilePassword from "./components/admin/profile/ChangeProfilePassword";
 
 function App() {
   return (
@@ -26,7 +26,7 @@ function App() {
         <Route path="/admin" element={<AdminLayout />}>
           <Route index element={<AdminPatients />}></Route>
           <Route path="profile" element={<EditProfile />}></Route>
-          <Route path="change_password" element={<ProfileChangePassword />}></Route>
+          <Route path="change_password" element={<ChangeProfilePassword />}></Route>
         </Route>
       </Routes>
     </AuthProvider>
