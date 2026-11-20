@@ -8,7 +8,8 @@ import ForgetPassword from "./components/auth/ForgetPassword";
 import ChangePassword from "./components/auth/ChangePassword";
 import { AuthProvider } from "./context/AuthProvider";
 import AdminPatients from "./components/admin/AdminPatients";
-import { PatientsProvider } from "./context/PatientsProvider";
+import EditProfile from "./components/admin/profile/EditProfile";
+import ProfileChangePassword from "./components/admin/profile/ProfileChangePassword";
 
 function App() {
   return (
@@ -24,6 +25,8 @@ function App() {
 
         <Route path="/admin" element={<AdminLayout />}>
           <Route index element={<AdminPatients />}></Route>
+          <Route path="profile" element={<EditProfile />}></Route>
+          <Route path="change_password" element={<ProfileChangePassword />}></Route>
         </Route>
       </Routes>
     </AuthProvider>

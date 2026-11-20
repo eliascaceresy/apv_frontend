@@ -1,5 +1,7 @@
 import { createContext, useCallback, useEffect, useRef, useState } from "react";
 import checkSession from "../services/authServices/checkSession";
+import notify from "../components/utils/notify";
+import updateProfileService from "../services/profileServices/updateProfile";
 
 const AuthContext = createContext();
 
@@ -9,6 +11,23 @@ const AuthProvider = props => {
   const [auth, setAuth] = useState(null);
   const [status, setStatus] = useState("checking");
   const sessionRequestId = useRef(0);
+
+  const updateProfile = (id, data) => {
+    try {
+      updateProfileService(id, data, response => {
+        console.log(response);
+
+        if (response.status === 200) {
+          setAuth({ profile: response.data.veterinarian });
+          notify("Perfil actualizado exitosamente!", "success");
+        } else {
+          notify(response.data.msg, "error");
+        }
+      });
+    } catch (error) {
+      notify(error, "error");
+    }
+  };
 
   const logout = useCallback(() => {
     sessionRequestId.current += 1;
@@ -53,14 +72,17 @@ const AuthProvider = props => {
     }
   }, [logout]);
 
-  const login = useCallback(async token => {
-    localStorage.setItem("session", token);
+  const login = useCallback(
+    async token => {
+      localStorage.setItem("session", token);
 
-    const authenticated = await loadSession();
-    if (!authenticated) {
-      throw new Error("No se pudo verificar la sesión.");
-    }
-  }, [loadSession]);
+      const authenticated = await loadSession();
+      if (!authenticated) {
+        throw new Error("No se pudo verificar la sesión.");
+      }
+    },
+    [loadSession],
+  );
 
   useEffect(() => {
     loadSession();
@@ -75,7 +97,7 @@ const AuthProvider = props => {
   }, [logout]);
 
   return (
-    <AuthContext.Provider value={{ auth, status, login, logout, retrySession: loadSession }}>
+    <AuthContext.Provider value={{ auth, status, login, logout, retrySession: loadSession, updateProfile }}>
       {children}
     </AuthContext.Provider>
   );
