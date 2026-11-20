@@ -2,12 +2,15 @@ import { createContext, useEffect, useState } from "react";
 import getPatientsService from "../services/patientServices/getPatients";
 import notify from "../components/utils/notify";
 import deletePatientService from "../services/patientServices/deletePatient";
+import useAuth from "./../hooks/useAuth";
 
 const PatientsContext = createContext();
 
 const PatientsProvider = ({ children }) => {
   const [patients, setPatients] = useState([]);
   const [patientEditing, setPatientEditing] = useState({});
+
+  const { auth } = useAuth();
 
   useEffect(() => {
     const getAllPatients = () => {
@@ -25,7 +28,7 @@ const PatientsProvider = ({ children }) => {
     };
 
     getAllPatients();
-  }, []);
+  }, [auth]);
 
   const savePatient = patient => {
     setPatients([...patients, patient]);
